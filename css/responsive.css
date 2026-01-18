@@ -1,0 +1,38 @@
+/* Tablet (>= 768px) */
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex; /* Mostrar menú en tablet/desktop */
+    }
+
+    .hero h1 {
+        font-size: 5rem;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+    }
+}
+
+/* Desktop (>= 1024px) */
+@media (min-width: 1024px) {
+    .container {
+        width: 85%;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Pantallas Extra Grandes (>= 1280px) */
+@media (min-width: 1280px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
