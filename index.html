@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DarenStore | Sneakers Exclusivos</title>
+    <title>DarenStore | Catálogo Premium</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="css/styles.css">
@@ -18,51 +17,114 @@
 
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="#" class="logo">DAREN<span>STORE</span>.</a>
-            <ul class="nav-links">
-                <li><a href="#" class="active">Colección</a></li>
-                <li><a href="#">Lanzamientos</a></li>
-                <li><a href="#">Contacto</a></li>
-                <li class="cart-icon"><i class="fa-solid fa-bag-shopping"></i></li>
+            
+            <button id="nav-toggle" class="nav-toggle-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <a href="index.html" class="logo">DAREN<span>STORE</span>.</a>
+
+            <ul class="nav-links" id="nav-menu">
+                <li class="nav-mobile-header">
+                    <span>MENÚ</span>
+                    <button id="nav-close" class="nav-close-btn"><i class="fa-solid fa-times"></i></button>
+                </li>
+                
+                <li><a href="index.html" class="active">Colección</a></li>
+                <li><a href="lanzamientos.html">Lanzamientos</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li class="cart-icon mobile-hidden"><i class="fa-solid fa-bag-shopping"></i></li>
             </ul>
+
+            <button id="mobile-filter-btn" class="filter-toggle-btn">
+                <i class="fa-solid fa-filter"></i>
+            </button>
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="container hero-content">
-            <span class="badge-new">NUEVA TEMPORADA</span>
-            <h1>VUELA <span class="text-stroke">ALTO</span></h1>
-            <p>La colección más exclusiva de Air Jordan. Estilo legendario para quienes no tocan el suelo.</p>
-            <a href="#catalogo" class="btn-primary">VER COLECCIÓN <i class="fa-solid fa-arrow-down"></i></a>
+    <header class="hero-small">
+        <div class="container">
+            <h1>COLECCIÓN <span class="text-accent">AIR JORDAN</span></h1>
         </div>
     </header>
 
-    <main id="catalogo" class="main-content">
-        <div class="container">
-            <div class="section-header">
-                <h2>DESTACADOS <span class="dot">.</span></h2>
-                <p>Selección premium disponible ahora.</p>
+    <main class="container catalog-layout">
+        
+        <aside id="filters-sidebar" class="filters-sidebar">
+            <div class="filters-header-mobile">
+                <h3>Filtrar por</h3>
+                <button id="close-filters" class="close-btn"><i class="fa-solid fa-times"></i></button>
             </div>
-            
+
+            <div class="filter-group">
+                <label for="search-input" class="filter-label">Buscar</label>
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Modelo, color...">
+                    <i class="fa-solid fa-search"></i>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label for="sort-select" class="filter-label">Ordenar por</label>
+                <select id="sort-select" class="styled-select">
+                    <option value="default">Relevancia</option>
+                    <option value="price-asc">Precio: Menor a Mayor</option>
+                    <option value="price-desc">Precio: Mayor a Menor</option>
+                    <option value="name-asc">Nombre: A - Z</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-label">Precio</span>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="price" value="all" checked> Todos
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="price" value="0-150"> Menos de $150
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="price" value="150-200"> $150 - $200
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="price" value="200-999"> Más de $200
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-label">Tallas Disponibles</span>
+                <div id="size-filters" class="chips-container"></div>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-label">Colores</span>
+                <div id="color-filters" class="color-swatches"></div>
+            </div>
+
+            <button id="clear-filters" class="btn-clear">
+                <i class="fa-solid fa-trash"></i> Limpiar Filtros
+            </button>
+        </aside>
+
+        <div id="filter-overlay" class="filter-overlay"></div>
+
+        <section class="products-area">
+            <div id="results-count" class="results-count">Cargando productos...</div>
             <div id="product-grid" class="product-grid">
                 </div>
-        </div>
+        </section>
+
     </main>
 
     <footer class="footer">
         <div class="container footer-content">
             <div class="footer-brand">
                 <h3>DAREN<span>STORE</span>.</h3>
-                <p>Especialistas en streetwear y cultura sneaker.</p>
             </div>
-            <div class="footer-social">
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
-                <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+            <div class="footer-bottom">
+                <p>&copy; 2024 DarenStore. Todos los derechos reservados.</p>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 DarenStore. Todos los derechos reservados.</p>
         </div>
     </footer>
 

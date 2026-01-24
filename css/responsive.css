@@ -1,38 +1,232 @@
-/* Tablet (>= 768px) */
-@media (min-width: 768px) {
+/* =========================================
+   MEDIA QUERIES (RESPONSIVE)
+   ========================================= */
+
+/* --- TABLET Y MÓVIL (Menor a 992px) --- */
+@media (max-width: 992px) {
+    
+    /* 1. Navbar Ajustes Flexbox */
+    .nav-container {
+        justify-content: space-between; /* Distribuye: Menú - Logo - Filtro */
+    }
+
+    /* Mostrar botones móviles (Hamburguesa y Filtro) */
+    .nav-toggle-btn { 
+        display: block; 
+    }
+    
+    .filter-toggle-btn {
+        display: inline-flex; 
+        background: var(--color-black); 
+        color: white; 
+        padding: 6px 14px; 
+        border-radius: 20px; 
+        font-size: 0.85rem; 
+        gap: 8px;
+        align-items: center;
+    }
+
+    /* 2. MENÚ DE NAVEGACIÓN (OFF-CANVAS / DESLIZANTE) */
     .nav-links {
-        display: flex; /* Mostrar menú en tablet/desktop */
+        /* En lugar de display:none, lo posicionamos fuera */
+        position: fixed;
+        top: 0;
+        left: -100%; /* Oculto a la izquierda */
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background-color: white;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 2rem;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        transition: left 0.3s ease;
+        z-index: 2000; /* Encima de todo */
+        display: flex; /* Necesario para flex-direction */
+        gap: 0;
     }
 
-    .hero h1 {
-        font-size: 5rem;
+    /* Clase activa para abrir el menú */
+    .nav-links.show-menu {
+        left: 0;
     }
 
+    /* Estilos de enlaces dentro del menú móvil */
+    .nav-links li {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .nav-links a {
+        font-size: 1.1rem;
+        color: var(--color-text-main);
+        display: block;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* Header interno del menú móvil (Título MENÚ y botón X) */
+    .nav-mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--color-black);
+    }
+
+    .nav-mobile-header span {
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .nav-close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--color-text-main);
+    }
+
+    /* Ocultar iconos de escritorio en móvil si se desea */
+    .mobile-hidden { display: none; }
+
+
+    /* 3. SIDEBAR DE FILTROS (OFF-CANVAS) */
+    .filters-sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%; /* Oculto fuera de pantalla */
+        width: 85%;
+        max-width: 320px;
+        height: 100vh;
+        z-index: 3000;
+        overflow-y: auto;
+        transition: left 0.3s ease-in-out;
+        border-radius: 0;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+    }
+
+    .filters-sidebar.active {
+        left: 0; /* Entra en pantalla */
+    }
+
+    .filters-header-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--color-text-main);
+    }
+
+    /* 4. OVERLAY OSCURO (Compartido) */
+    .filter-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1500;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s;
+        backdrop-filter: blur(2px);
+    }
+
+    .filter-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+
+    /* 5. Ajustes Generales Móvil */
+    .catalog-layout {
+        flex-direction: column;
+    }
+
+    .product-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- TABLET (Entre 600px y 992px) --- */
+@media (min-width: 600px) and (max-width: 992px) {
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-
-    .footer-content {
-        flex-direction: row;
-        justify-content: space-between;
-        text-align: left;
-    }
 }
 
-/* Desktop (>= 1024px) */
-@media (min-width: 1024px) {
-    .container {
-        width: 85%;
+/* --- DESKTOP (Mayor a 993px) --- */
+@media (min-width: 993px) {
+    
+    /* 1. Navbar Completo */
+    .nav-links { display: flex; }
+    .nav-toggle-btn { display: none !important; }
+    .filter-toggle-btn { display: none !important; }
+
+    /* 2. Sidebar Sticky */
+    .filters-sidebar {
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
     }
 
+    /* Ocultar overlay en desktop por seguridad */
+    .filter-overlay { display: none !important; }
+
+    /* 3. Grid de 3 Columnas */
     .product-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+
+    /* 4. Página Producto layout */
+    .product-layout {
+        grid-template-columns: 1.2fr 1fr; /* Imagen más grande que info */
+        gap: 4rem;
+        align-items: start;
+    }
+
+    .product-info-col {
+        position: sticky;
+        top: 110px;
+    }
 }
 
-/* Pantallas Extra Grandes (>= 1280px) */
+/* --- PANTALLAS GRANDES (Mayor a 1280px) --- */
 @media (min-width: 1280px) {
     .product-grid {
         grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* =========================================
+   RESPONSIVE PÁGINAS EXTRA (Lanzamientos/Contacto)
+   ========================================= */
+
+@media (min-width: 768px) {
+    /* Lanzamientos - Estilo Horizontal */
+    .drop-card {
+        grid-template-columns: 1fr 1fr; /* Imagen izq, info der */
+        height: 350px;
+    }
+
+    .drop-image { height: 100%; }
+    
+    /* Contacto - Split Screen */
+    .contact-layout {
+        grid-template-columns: 1.2fr 0.8fr; /* Formulario más ancho */
     }
 }
