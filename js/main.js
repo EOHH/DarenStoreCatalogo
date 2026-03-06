@@ -1,7 +1,7 @@
 /**
  * Lógica Principal DarenStore
  * Filtros, Búsqueda, Menú Móvil y Renderizado
- * Actualizado: Soporta colores personalizados y Menú Hamburguesa
+ * Actualizado: Soporta todos los colores de la nueva BD y tallas seguras
  */
 
 // CONFIGURACIÓN
@@ -24,7 +24,7 @@ const closeFilterBtn = document.getElementById('close-filters');
 const sidebar = document.getElementById('filters-sidebar');
 const overlay = document.getElementById('filter-overlay');
 
-// Elementos Menú Hamburguesa (NUEVO)
+// Elementos Menú Hamburguesa
 const navMenu = document.getElementById('nav-menu');
 const navToggle = document.getElementById('nav-toggle');
 const navClose = document.getElementById('nav-close');
@@ -40,47 +40,54 @@ let activeFilters = {
 
 // --- 1. Inicialización ---
 const init = () => {
-    // Solo iniciar si estamos en la página index (donde existe el grid)
     if (gridContainer) {
         generarFiltrosDinamicos();
-        aplicarFiltros(); // Render inicial
+        aplicarFiltros(); 
         setupEventListeners();
     } else {
-        // Si estamos en otra página (ej. contacto), solo iniciamos el menú
         setupNavigationEvents();
     }
 };
 
 // --- 2. Generar UI de Filtros desde Datos ---
 const generarFiltrosDinamicos = () => {
-    // Extraer tallas únicas y ordenarlas
-    const todasTallas = [...new Set(productos.flatMap(p => p.tallas))].sort();
+    // Extraer tallas únicas y ordenarlas (Protegido usando String() por si vienen números)
+    const todasTallas = [...new Set(productos.flatMap(p => p.tallas))].sort((a, b) => Number(a) - Number(b));
     
     // Extraer colores únicos
     const todosColores = [...new Set(productos.flatMap(p => p.colores))].sort();
 
-    // Renderizar Chips de Tallas
+    // Renderizar Chips de Tallas (Quitando ' US' si existe, si no, imprime el número)
     sizeFilterContainer.innerHTML = todasTallas.map(talla => `
-        <div class="filter-chip" data-value="${talla}">${talla.replace(' US', '')}</div>
+        <div class="filter-chip" data-value="${talla}">${String(talla).replace(' US', '')}</div>
     `).join('');
 
-    // Mapa de Colores (Tu configuración personalizada)
+    // Mapa de Colores Ampliado para la nueva Base de Datos
     const colorMap = {
-        'Chicago Red': '#CE1126',
-        'Black Toe': '#111111',
-        'University Blue': '#89CFF0',
-        'Military Black': '#222222',
-        'Thunder Yellow': '#FFD700',
-        'Concord': '#333333',
-        'Space Jam': '#1A1A1A',
-        'Triple White': '#F5F5F5',
-        'Bred': '#8B0000',
-        'Black/Red': '#570000',
-        'Wolf Grey': '#A9A9A9',
-        'White Cement': '#E0E0E0',
-        'True Blue': '#0047AB',
-        // Fallbacks básicos
-        'Rojo': '#CE1126', 'Blanco': '#FFFFFF', 'Negro': '#000000', 'Azul': '#0051BA'
+        'Black Phantom': '#1b1b1b',
+        'Reverse Mocha': '#6a4e42',
+        'Fragment': '#0033a0',
+        'Mocha': '#5c4033',
+        'Black Cat': '#111111',
+        'Pure Money': '#ffffff',
+        'Sunset': '#ff8c00',
+        'Rio': '#ff4500',
+        'Fear': '#4a4a4a',
+        'Frozen Moments': '#e0e0e0',
+        'Military Black': '#2b2b2b',
+        'Military Blue': '#0055a4',
+        'Red Thunder': '#aa0000',
+        'White Thunder': '#f4f4f4',
+        'Off White': '#fdf5e6',
+        'Blanco': '#ffffff',
+        'Negro': '#000000',
+        'NOCTA': '#ffffff', 
+        'Grey': '#808080',
+        'Black White': '#000000', 
+        'Beige White': '#f5f5dc',
+        // Fallbacks básicos antiguos
+        'Chicago Red': '#CE1126', 'Black Toe': '#111111', 'University Blue': '#89CFF0',
+        'Rojo': '#CE1126', 'Azul': '#0051BA'
     };
 
     colorFilterContainer.innerHTML = todosColores.map(color => {
@@ -114,10 +121,10 @@ const aplicarFiltros = () => {
             }
         }
 
-        // C. Filtro Tallas
+        // C. Filtro Tallas (usando String para comparar siempre texto)
         let coincideTalla = true;
         if (activeFilters.sizes.length > 0) {
-            coincideTalla = activeFilters.sizes.some(s => producto.tallas.includes(s));
+            coincideTalla = activeFilters.sizes.some(s => producto.tallas.map(String).includes(s));
         }
 
         // D. Filtro Colores
@@ -170,10 +177,9 @@ const renderizarGrid = (listaProductos) => {
     `).join('');
 };
 
-// --- 5. Event Listeners (Filtros + Navegación) ---
+// --- 5. Event Listeners ---
 const setupEventListeners = () => {
     
-    // --- Lógica de Filtros (Inputs) ---
     if(searchInput) searchInput.addEventListener('input', (e) => { activeFilters.search = e.target.value; aplicarFiltros(); });
     if(sortSelect) sortSelect.addEventListener('change', (e) => { activeFilters.sort = e.target.value; aplicarFiltros(); });
     
@@ -181,7 +187,6 @@ const setupEventListeners = () => {
         radio.addEventListener('change', (e) => { activeFilters.price = e.target.value; aplicarFiltros(); });
     });
 
-    // Tallas
     sizeFilterContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('filter-chip')) {
             const val = e.target.dataset.value;
@@ -191,7 +196,6 @@ const setupEventListeners = () => {
         }
     });
 
-    // Colores
     colorFilterContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('color-btn')) {
             const val = e.target.dataset.value;
@@ -201,7 +205,6 @@ const setupEventListeners = () => {
         }
     });
 
-    // Limpiar Filtros
     if(clearBtn) {
         clearBtn.addEventListener('click', () => {
             activeFilters = { search: '', price: 'all', sizes: [], colors: [], sort: 'default' };
@@ -214,52 +217,40 @@ const setupEventListeners = () => {
         });
     }
 
-    // --- Iniciar Eventos de Navegación ---
     setupNavigationEvents();
 };
 
-// --- 6. Lógica de Navegación (Menú Hamburguesa & Sidebar) ---
+// --- 6. Lógica de Navegación ---
 const setupNavigationEvents = () => {
-    
-    // Función: Abrir/Cerrar Barra de Filtros (Móvil)
     const toggleSidebarFiltros = () => {
         if(sidebar) sidebar.classList.toggle('active');
         if(overlay) overlay.classList.toggle('active');
-        // Si abro filtros, aseguro que el menú de navegación esté cerrado
         if(navMenu) navMenu.classList.remove('show-menu');
     };
 
-    // Función: Abrir/Cerrar Menú de Navegación
     const toggleNavMenu = () => {
         if(navMenu) navMenu.classList.toggle('show-menu');
         if(overlay) overlay.classList.toggle('active');
-        // Si abro menú, aseguro que los filtros estén cerrados
         if(sidebar) sidebar.classList.remove('active');
     };
 
-    // Función: Cerrar Todo (Al hacer click en overlay o X)
     const closeAll = () => {
         if(sidebar) sidebar.classList.remove('active');
         if(navMenu) navMenu.classList.remove('show-menu');
         if(overlay) overlay.classList.remove('active');
     };
 
-    // Listeners Filtros (Solo si existen en esta página)
     if(mobileFilterBtn) mobileFilterBtn.addEventListener('click', toggleSidebarFiltros);
     if(closeFilterBtn) closeFilterBtn.addEventListener('click', closeAll);
 
-    // Listeners Menú Navegación (NUEVO)
     if(navToggle) navToggle.addEventListener('click', toggleNavMenu);
     if(navClose) navClose.addEventListener('click', closeAll);
 
-    // Overlay cierra todo
     if(overlay) overlay.addEventListener('click', closeAll);
 
-    // Cerrar menú al hacer clic en un enlace (Mejora UX)
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', closeAll);
     });
 };
 
-// Arrancar app cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', init);
